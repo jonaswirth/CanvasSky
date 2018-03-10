@@ -8,20 +8,27 @@ const skySettings:any = {
   }
 }
 
-var dots = [];
+class canvasSky{
 
-window.onload = init;
+private canvas : HTMLCanvasElement;
+private ctx : CanvasRenderingContext2D;
 
-function init(){
+constructor(){
+  this.canvas = <HTMLCanvasElement> document.getElementById("sky");
+  this.ctx = this.canvas.getContext("2d");
+  this.init();
+}
+
+private init(){
 //Get the canvas
 var sky = document.getElementById("sky");
 //set background
-sky.setAttribute("style", "background: linear-gradient("+appendColors(skySettings.colors)+")");
+sky.setAttribute("style", "background: linear-gradient("+this.appendColors(skySettings.colors)+")");
 
-createStars();
+this.drawStars();
 }
 
-function appendColors(colors:any){
+private appendColors(colors:any){
   console.log(colors);
   if(!Array.isArray(colors))
     return;
@@ -37,15 +44,17 @@ function appendColors(colors:any){
   return str;
 }
 
-function createStars(){
-    var canvas : HTMLCanvasElement = <HTMLCanvasElement> document.getElementById("sky");
-    var ctx : CanvasRenderingContext2D = canvas.getContext("2d");
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
+private drawStars(){
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     var j, dot;
     for(j = 0; j < skySettings.stars.count; j++) {
-      ctx.beginPath();
-      ctx.arc(Math.random() * canvas.width, Math.random() * canvas.height, Math.random() * (skySettings.stars.minSize - skySettings.stars.maxSize + 1) + skySettings.stars.minSize, 0, Math.PI * 2, false);
-      ctx.fillStyle = skySettings.stars.color;
-      ctx.fill();
+      this.ctx.beginPath();
+      this.ctx.arc(Math.random() * this.canvas.width, Math.random() * this.canvas.height, Math.random() * (skySettings.stars.minSize - skySettings.stars.maxSize + 1) + skySettings.stars.minSize, 0, Math.PI * 2, false);
+      this.ctx.fillStyle = skySettings.stars.color;
+      this.ctx.fill();
     }
 }
+
+}
+
+window.onload = () => {new canvasSky()};
