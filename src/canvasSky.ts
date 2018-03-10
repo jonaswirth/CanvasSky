@@ -1,4 +1,5 @@
-const skySettings:any = {
+class canvasSky{
+private skySettings:any = {
   colors: ['#100046','#b2541e'],
   stars:{
     count: 250,
@@ -6,9 +7,7 @@ const skySettings:any = {
     maxSize: 3,
     color: '#ffffff'
   }
-}
-
-class canvasSky{
+};
 
 private canvas : HTMLCanvasElement;
 private ctx : CanvasRenderingContext2D;
@@ -23,7 +22,7 @@ private init(){
 //Get the canvas
 var sky = document.getElementById("sky");
 //set background
-sky.setAttribute("style", "background: linear-gradient("+this.appendColors(skySettings.colors)+")");
+sky.setAttribute("style", "background: linear-gradient("+this.appendColors(this.skySettings.colors)+")");
 
 this.drawStars();
 }
@@ -47,14 +46,14 @@ private appendColors(colors:any){
 private drawStars(){
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     var j, dot;
-    for(j = 0; j < skySettings.stars.count; j++) {
+    for(j = 0; j < this.skySettings.stars.count; j++) {
       this.ctx.beginPath();
-      this.ctx.arc(Math.random() * this.canvas.width, Math.random() * this.canvas.height, Math.random() * (skySettings.stars.minSize - skySettings.stars.maxSize + 1) + skySettings.stars.minSize, 0, Math.PI * 2, false);
-      this.ctx.fillStyle = skySettings.stars.color;
+      this.ctx.arc(Math.random() * this.canvas.width, Math.random() * this.canvas.height, Math.random() * (this.skySettings.stars.minSize - this.skySettings.stars.maxSize + 1) + this.skySettings.stars.minSize, 0, Math.PI * 2, false);
+      this.ctx.fillStyle = this.skySettings.stars.color;
       this.ctx.fill();
     }
 }
 
-}
+};
 
 window.onload = () => {new canvasSky()};
