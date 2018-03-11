@@ -16,32 +16,25 @@ constructor(){
   this.canvas = <HTMLCanvasElement> document.getElementById("sky");
   this.ctx = this.canvas.getContext("2d");
   this.init();
-}
+};
 
 private init(){
-//Get the canvas
-var sky = document.getElementById("sky");
-//set background
-sky.setAttribute("style", "background: linear-gradient("+this.appendColors(this.skySettings.colors)+")");
+//set background color
+this.canvas.setAttribute("style", "background: linear-gradient("+this.appendColors(this.skySettings.colors)+")");
 
 this.drawStars();
-}
+};
 
-private appendColors(colors:any){
-  console.log(colors);
-  if(!Array.isArray(colors))
-    return;
+private appendColors(colors:Array<string>){
   if(colors.length === 1)
     return colors[0];
 
   var str = colors[0];
-
   for(var i = 1; i<colors.length; i++){
     str += (", " + colors[i]);
   }
-  console.log(str);
   return str;
-}
+};
 
 private drawStars(){
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
@@ -52,8 +45,7 @@ private drawStars(){
       this.ctx.fillStyle = this.skySettings.stars.color;
       this.ctx.fill();
     }
-}
-
+  }
 };
 
 window.onload = () => {new canvasSky()};
