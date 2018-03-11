@@ -1,5 +1,7 @@
 class canvasSky{
 private skySettings:any = {
+  size: 'fullpage',
+  mode: 'static',
   colors: ['#100046','#b2541e'],
   stars:{
     count: 250,
@@ -19,6 +21,12 @@ constructor(){
 };
 
 private init(){
+//Draw Canvas
+if(this.skySettings.size === 'fullpage'){
+  this.canvas.width = window.innerWidth;
+  this.canvas.height = window.innerHeight;
+}
+
 //set background color
 this.canvas.setAttribute("style", "background: linear-gradient("+this.appendColors(this.skySettings.colors)+")");
 
