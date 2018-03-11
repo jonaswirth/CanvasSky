@@ -1,7 +1,7 @@
 class canvasSky{
 private skySettings:any = {
   size: 'fullpage',
-  mode: 'static',
+  mode: 'responsive',
   colors: ['#100046','#b2541e'],
   stars:{
     count: 250,
@@ -25,6 +25,15 @@ private init(){
 if(this.skySettings.size === 'fullpage'){
   this.canvas.width = window.innerWidth;
   this.canvas.height = window.innerHeight;
+}
+
+if(this.skySettings.mode === 'responsive'){
+  window.addEventListener('resize', () => {
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    this.canvas.width = window.innerWidth;
+    this.canvas.height = window.innerHeight;
+    this.drawStars();
+  }, true);
 }
 
 //set background color
