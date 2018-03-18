@@ -1,0 +1,11 @@
+{
+  "size": "fullpage",
+  "mode": "responsive",
+  "colors": ["#100046","#b2541e"],
+  "stars":{
+    "count": 250,
+    "minSize": 1,
+    "maxSize": 3,
+    "color": "#ffffff"
+    }
+}

@@ -11,22 +11,34 @@ private skySettings:any = {
   }
 };
 
+private settings:any;
+
 private canvas : HTMLCanvasElement;
 private ctx : CanvasRenderingContext2D;
 
 constructor(){
   this.canvas = <HTMLCanvasElement> document.getElementById("sky");
   this.ctx = this.canvas.getContext("2d");
-  this.init();
+  this.loadConfig();
 };
 
+private loadConfig():void{
+  var request = new XMLHttpRequest();
+  request.onload = () => {
+    this.skySettings = JSON.parse(request.responseText);
+    this.init();
+  };
+  request.open("get", "src/settings.json", true);
+  request.send();
+}
+
 private init(){
-//Draw Canvas
+//resize canvas
 if(this.skySettings.size === 'fullpage'){
   this.canvas.width = window.innerWidth;
   this.canvas.height = window.innerHeight;
 }
-
+//redraw canvas on window resize if mode = responsive
 if(this.skySettings.mode === 'responsive'){
   window.addEventListener('resize', () => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
