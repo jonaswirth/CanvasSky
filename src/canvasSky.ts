@@ -3,8 +3,8 @@ private skySettings:any;
 private canvas : HTMLCanvasElement;
 private ctx : CanvasRenderingContext2D;
 
-constructor(configFile:string = null){
-  this.canvas = <HTMLCanvasElement> document.getElementById("sky");
+constructor(elementId:string, configFile:string = null){
+  this.canvas = <HTMLCanvasElement> document.getElementById(elementId);
   this.ctx = this.canvas.getContext("2d");
   if(configFile === null){
     this.getDefaultConfig();
@@ -23,18 +23,17 @@ private loadConfig(configFile:string):void{
   request.send();
 };
 
-private init(){
+private init():void{
 //resize canvas
-if(this.skySettings.size === 'fullpage'){
-  this.canvas.width = window.innerWidth;
-  this.canvas.height = window.innerHeight;
-}
+this.canvas.width = this.getWidth();
+this.canvas.height = this.getHeight();
+
 //redraw canvas on window resize if mode = responsive
 if(this.skySettings.mode === 'responsive'){
   window.addEventListener('resize', () => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.canvas.width = window.innerWidth;
-    this.canvas.height = window.innerHeight;
+    this.canvas.width = this.getWidth();
+    this.canvas.height = this.getHeight();
     this.drawStars();
   }, true);
 }
@@ -45,7 +44,7 @@ this.canvas.setAttribute("style", "background: linear-gradient("+this.appendColo
 this.drawStars();
 };
 
-private appendColors(colors:Array<string>){
+private appendColors(colors:Array<string>):string{
   if(colors.length === 1)
     return colors[0];
 
@@ -56,7 +55,7 @@ private appendColors(colors:Array<string>){
   return str;
 };
 
-private drawStars(){
+private drawStars():void{
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     var j, dot;
     for(j = 0; j < this.skySettings.stars.count; j++) {
@@ -65,11 +64,32 @@ private drawStars(){
       this.ctx.fillStyle = this.skySettings.stars.color;
       this.ctx.fill();
     }
-  };
+};
+
+private getHeight():number{
+  if(this.skySettings.size === "fullpage"){
+    return window.innerHeight;
+  }
+  if(this.skySettings.size.height.slice(-1) === "%"){
+    return window.innerHeight / 100 * this.skySettings.size.height.substring(0, this.skySettings.size.height.length - 1);
+  }
+}
+
+private getWidth():number{
+  if(this.skySettings.size === "fullpage"){
+    return window.innerWidth;
+  }
+  if(this.skySettings.size.width.slice(-1) === "%"){
+    return window.innerWidth / 100 * this.skySettings.size.width.substring(0, this.skySettings.size.width.length - 1);
+  }
+}
 
 private getDefaultConfig():void{
 this.skySettings = {
-  size: 'fullpage',
+  size: {
+    width: "100%",
+    height: "50%"
+  },
   mode: 'responsive',
   colors: ['#100046','#b2541e'],
   stars:{
@@ -83,5 +103,3 @@ this.init();
 }
 
 };
-
-window.onload = () => {new canvasSky("src/settings.json")};
