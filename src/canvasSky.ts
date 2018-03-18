@@ -1,36 +1,27 @@
 class canvasSky{
-private skySettings:any = {
-  size: 'fullpage',
-  mode: 'responsive',
-  colors: ['#100046','#b2541e'],
-  stars:{
-    count: 250,
-    minSize: 1,
-    maxSize: 3,
-    color: '#ffffff'
-  }
-};
-
-private settings:any;
-
+private skySettings:any;
 private canvas : HTMLCanvasElement;
 private ctx : CanvasRenderingContext2D;
 
-constructor(){
+constructor(configFile:string = null){
   this.canvas = <HTMLCanvasElement> document.getElementById("sky");
   this.ctx = this.canvas.getContext("2d");
-  this.loadConfig();
+  if(configFile === null){
+    this.getDefaultConfig();
+  }else{
+    this.loadConfig(configFile);
+  }
 };
 
-private loadConfig():void{
+private loadConfig(configFile:string):void{
   var request = new XMLHttpRequest();
   request.onload = () => {
     this.skySettings = JSON.parse(request.responseText);
     this.init();
   };
-  request.open("get", "src/settings.json", true);
+  request.open("get", configFile, true);
   request.send();
-}
+};
 
 private init(){
 //resize canvas
@@ -74,7 +65,23 @@ private drawStars(){
       this.ctx.fillStyle = this.skySettings.stars.color;
       this.ctx.fill();
     }
+  };
+
+private getDefaultConfig():void{
+this.skySettings = {
+  size: 'fullpage',
+  mode: 'responsive',
+  colors: ['#100046','#b2541e'],
+  stars:{
+    count: 250,
+    minSize: 1,
+    maxSize: 3,
+    color: '#ffffff'
   }
 };
+this.init();
+}
 
-window.onload = () => {new canvasSky()};
+};
+
+window.onload = () => {new canvasSky("src/settings.json")};
